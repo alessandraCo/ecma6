@@ -34,8 +34,12 @@
             <div class="navbar-nav">
               <a class="nav-link" href="./index.html">Exercise 1 - Math</a>
               <a class="nav-link" href="./ex2.html">Exercise 2 - Spin sdroW</a>
-              <a class="nav-link" href="./ex3.html">Exercise 3 - Encrypted Message</a>
-              <a class="nav-link active" aria-current="page" href="#">Exercise 4 - Il Lonfo</a>
+              <a class="nav-link" href="./ex3.html"
+                >Exercise 3 - Encrypted Message</a
+              >
+              <a class="nav-link active" aria-current="page" href="#"
+                >Exercise 4 - Il Lonfo</a
+              >
             </div>
           </div>
         </div>
@@ -47,12 +51,50 @@
         <br />
         <h1 class="container text-center">Il Lonfo</h1>
         <br />
-        <h4 class="container text-center">description</h4>
+        <h4 class="container text-center">
+          I'm returning the text 'Il Lonfo' containing only the words
+          alphabetical ordered removig duplicates and punctuation
+        </h4>
         <br />
       </section>
+      <section class="container">
+        <pre id="text">
+Il Lonfo non vaterca né gluisce
+e molto raramente barigatta,
+ma quando soffia il bego a bisce bisce
+sdilenca un poco e gnagio s'archipatta.
+
+È frusco il Lonfo! È pieno di lupigna
+arrafferia malversa e sofolenta!
+Se cionfi ti sbiduglia e ti arrupigna
+se lugri ti botalla e ti criventa.
+
+Eppure il vecchio Lonfo ammargelluto
+che bete e zugghia e fonca nei trombazzi
+fa lègica busìa, fa gisbuto;
+
+e quasi quasi in segno di sberdazzi
+gli affarferesti un gniffo. Ma lui zuto
+t'alloppa, ti sbernecchia; e tu l'accazzi.
+        </pre>
+      </section>
+      <section>
+        <div class="container text-center">
+          <button
+            type="button"
+            class="btn btn-info"
+            id="orderText"
+            style="background-color: #b0e6f5"
+          >
+            Go!
+          </button>
+        </div>
+        <br/>
+      </section>
+      <section class="container text-center" id="showResult"></section>
     </main>
 
     <script src="js/bootstrap-5.2.3-dist/bootstrap.bundle.min.js"></script>
-    
+    <script src="js/ex4.js"></script>
   </body>
 </html>
