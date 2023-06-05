@@ -33,8 +33,10 @@
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
               <a class="nav-link" href="./index.html">Exercise 1 - Math</a>
-              <a class="nav-link"  href="./ex2.html">Exercise 2 - Spin sdroW</a>
-              <a class="nav-link active" aria-current="page" href="#">Exercise 3 - Encrypted Message</a>
+              <a class="nav-link" href="./ex2.html">Exercise 2 - Spin sdroW</a>
+              <a class="nav-link active" aria-current="page" href="#"
+                >Exercise 3 - Encrypted Message</a
+              >
               <a class="nav-link" href="./ex4.html">Exercise 4 - Il Lonfo</a>
             </div>
           </div>
@@ -45,14 +47,58 @@
     <main>
       <section>
         <br />
-        <h1 class="container text-center">Encrypted Message</h1>
+        <h1 class="text-center">Encrypted Message</h1>
         <br />
-        <h4 class="container text-center">description</h4>
+        <h4 class="text-center">I encrypt a message using Ceasar Cipher</h4>
         <br />
+      </section>
+      <form>
+        <div style="margin-left: 20px">
+          <h5 class="text-sm-start">Encrypt your message</h5>
+          <br />
+          <div class="mb-3">
+            <label for="caesarNumber">Number of Caesar: </label>
+            <input
+              type="number"
+              name="caesarNumber"
+              id="caesarNumber"
+              step="1"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="message">Message: </label>
+            <input
+              data-bs-toggle="tooltip"
+              data-bs-placement="top"
+              data-bs-title="Use capital letters only"
+              type="text"
+              name="message"
+              id="message"
+              placeholder="enter your message"
+            />
+          </div>
+          <button
+            type="button"
+            id="startEncrypt"
+            class="btn btn-info"
+            style="background-color: #b0e6f5"
+          >
+            Encrypt
+          </button>
+        </div>
+
+        <section>
+          <p id="errorMsg"></p>
+        </section>
+      </form>
+
+      <section style="margin-left: 20px">
+        <h6>Encrypted Message:</h6>
+        <div id="showMessage"></div>
       </section>
     </main>
 
     <script src="js/bootstrap-5.2.3-dist/bootstrap.bundle.min.js"></script>
-    
+    <script src="js/ex3.js"></script>
   </body>
 </html>
