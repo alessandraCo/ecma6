@@ -8,7 +8,6 @@
     //const primeNumbers = new Array();
 
     const norFiboNorPrime = new Array();
-
     //first attempt: compute Fibonacci Sequence first to verify if it contains the considered number
     //disadvantages: is difficult to calculate Fibonacci Sequence length
 
@@ -35,7 +34,7 @@
     //algorithm: a number is part of Fibonacci Sequence if and only if either one of (5N^2 + 4) or (5N^2 - 4) is a perfect square
     const isFromFibonacci = (number) => {
         let checkFibo = true;
-        if(isPerfectSquare(5*number*number+4) || isPerfectSquare(5*number*number-4)) {
+        if (isPerfectSquare(5 * number * number + 4) || isPerfectSquare(5 * number * number - 4)) {
             return checkFibo = true;
         } else {
             return checkFibo = false;
@@ -81,8 +80,8 @@
         let start = 0;
         let end;
         while (start < dim) {
-            if (start+30 < dim) {
-                end = start+30;
+            if (start + 30 < dim) {
+                end = start + 30;
             } else {
                 end = dim
             }
@@ -90,7 +89,7 @@
             newP.innerHTML = norFiboNorPrime.slice(start, end).join(' ');
             section.appendChild(newP);
             start += 30;
-        }    
+        }
     }
 }
 

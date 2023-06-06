@@ -32,15 +32,17 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a class="nav-link active" aria-current="page" href="#"
+              <a class="nav-link" aria-current="page" href="./index.html"
                 >Exercise 1</a
               >
               <a class="nav-link" href="./ex2.html">Exercise 2</a>
-              <a class="nav-link" href="./ex3.html">Exercise 3</a>
+              <a class="nav-link" href="./ex3.html"
+                >Exercise 3</a
+              >
               <a class="nav-link" href="./ex4.html">Exercise 4</a>
               <a class="nav-link" href="./ex5.html">Exercise 5</a>
               <a class="nav-link" href="./ex6.html">Exercise 6</a>
-              <a class="nav-link" href="./words.html">Words</a>
+              <a class="nav-link active" aria-current="page" href="#">Words</a>
             </div>
           </div>
         </div>
@@ -50,29 +52,39 @@
     <main>
       <section>
         <br />
-        <h1 class="text-center">Neither Fibonacci Nor Prime</h1>
+        <h1 class="text-center">Let's Play</h1>
         <br />
-        <h4 class="text-center">
-          I give the first 786 natural numbers that are neither Fibonacci
-          numbers nor prime numbers
-        </h4>
+        <h4 class="text-center">Try to guess this word</h4>
         <br />
-        <div class="container text-center">
-        <button
-          type="button"
-          class="btn btn-info"
-          id="startComputing"
-          style="background-color: #b0e6f5"
-        >
-          Go!
-        </button>
-        </div>
+        <h6 class="text-center" id="attempts"></h6>
+        <br />
+        <h5 class="text-center" id="winOrLose"></h5>
+        <br />
+        <section class="container text-md-center">
+            <form>
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="insert you text here"
+                    aria-label="insert you text here"
+                    aria-describedby="textInput"
+                    id="textInput"
+                  />
+                  <button
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    id="checkWord"
+                  >Try
+                  </button>
+                </div>
+              </form>
+          </section>
       </section>
-      <section class="container text-center" id="showResult">
-      </section>
+      <section class="container text-center" id="showResult"></section>
     </main>
 
-    <script src="js/index.js"></script>
+    <script src="js/words.js"></script>
     <script src="js/bootstrap-5.2.3-dist/bootstrap.bundle.min.js"></script>
   </body>
 </html>
