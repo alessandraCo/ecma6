@@ -1,0 +1,9 @@
+div.wordLetter {
+    display: inline-flex;
+    background-color: #b0e6f5;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    width: 50px;
+
+}

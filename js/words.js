@@ -1,37 +1,60 @@
 {
     let attempts = 5;
-    const secretWord = `fiori`;
+    let secretWord;
     let found = false;
 
-    const isEqual = document.getElementById("showResult");
+    //const isEqual = document.getElementById("showResult");
     const tentativi = document.getElementById("attempts");
     const msg = document.getElementById("winOrLose");
+    const letters = document.getElementById("inputs");
+    const errorMsg = document.getElementById("errorMsg");
+
+    const generateSecretWord = () => {
+        const pr1 = fetch('http://localhost:3000/parole');
+        const pr2 = pr1.then(convertiJson);
+        pr2.then(responseOK, responseKO);
+
+        function convertiJson(response) {
+            return response.json();
+        }
+
+        function responseOK(data) {
+            const random = Math.floor(Math.random() * data.length);
+            secretWord = data[random];
+        };
+
+        function responseKO(err) {
+            alert(err.message);
+        }
+
+    };
 
     window.onload = () => {
         document.getElementById("checkWord").addEventListener("click", checkWord);
+        generateSecretWord();
         showAttempts();
     };
 
     const checkPosition = (word, letter) => {
         if (secretWord.indexOf(letter) === word.indexOf(letter)) {
             console.log(`letter ${letter} is in the right position`);
-            const tip = document.createElement("p");
-            tip.innerHTML = `letter ${letter} is in the right position`;
-            isEqual.appendChild(tip);
+            return true;
+            // const tip = document.createElement("p");
+            // tip.innerHTML = `letter ${letter} is in the right position`;
+            // isEqual.appendChild(tip);
         }
+        return false;
     }
 
-    const checkLetters = (input) => {
-        let chars = input.split('');
-        chars.forEach(letter => {
-            if (secretWord.includes(letter)) {
-                const tip = document.createElement("p")
-                tip.innerHTML = `letter ${letter} is present`;
-                isEqual.appendChild(tip);
-                console.log(`letter ${letter} is present`);
-                checkPosition(input, letter);
-            }
-        });
+    const checkLetter = (letter) => {
+        if (secretWord.includes(letter)) {
+            // const tip = document.createElement("p")
+            // tip.innerHTML = `letter ${letter} is present`;
+            // isEqual.appendChild(tip);
+            console.log(`letter ${letter} is present`);
+            return true;
+        }
+        return false;
     };
 
     const showAttempts = () => {
@@ -43,31 +66,57 @@
         attempts = 5;
         showAttempts();
         //clear previus inputs
-        while (isEqual.firstChild) { isEqual.removeChild(isEqual.firstChild); }
+        //while (isEqual.firstChild) { isEqual.removeChild(isEqual.firstChild); }
+        while (letters.firstChild) { letters.removeChild(letters.firstChild); }
         //end game message
-        found ? message = "You win!" : message = "You lose!";
+        found ? message = `You win! The world was ${secretWord}` : message = `You lose! The world was ${secretWord}`;
         console.log(message);
-        msg.innerHTML = `${message}`
+        msg.innerHTML = `${message}`;
+        found = false;
+        generateSecretWord();
     };
 
     const checkWord = () => {
+        errorMsg.innerText = "";
         msg.innerHTML = "";
         attempts--;
-        if (attempts <= 0) {
+        const inputIn = document.getElementById("textInput").value;
+        //remove spaces and in lower case
+        const input = inputIn.trim().toLowerCase();
+        if (attempts == 0) {
+            if (input === secretWord) { found = true; }
             reset();
             return;
         }
-        const input = document.getElementById("textInput").value;
-        const newP = document.createElement("p");
-        if (input !== secretWord) {
-            checkLetters(input);
-            newP.innerHTML = `${input} isn't my word!`;
-            isEqual.appendChild(newP);
+        if (input.length !== 5) {
+            errorMsg.innerText = `the world must have 5 letters`;
+            console.log(`the world must have 5 letters`);
+            attempts++;
+            return;
         } else {
-            found = true;
-            reset();
-            return;
+            const inputContainer = document.createElement("div");
+            for (i = 0; i < input.length; i++) {
+                const letterContainer = document.createElement("div");
+                letterContainer.classList.add("wordLetter");
+                letterContainer.innerText = input[i];
+                if (input !== secretWord) {
+                    const letterPresent = checkLetter(input[i]);
+                    if (letterPresent) {
+                        letterContainer.style.backgroundColor = "#a0f6a4";
+                    }
+                    const positionPresent = checkPosition(input, input[i]);
+                    if (positionPresent) {
+                        letterContainer.style.backgroundColor = "yellow";
+                    }
+                } else {
+                    found = true;
+                    reset();
+                    return;
+                }
+                inputContainer.appendChild(letterContainer);
+            }
+            letters.appendChild(inputContainer);
+            showAttempts();
         }
-        showAttempts();
     };
 }

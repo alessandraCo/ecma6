@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/bootstrap-5.2.3-dist/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-5.2.3-dist/style.css" />
     <link rel="shortcut icon" href="assets/logo.svg" type="image/x-icon" />
     <title>Exercises</title>
   </head>
@@ -32,15 +33,15 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a class="nav-link" href="./index.html">Exercise 1</a>
+              <a class="nav-link" aria-current="page" href="./index.html"
+                >Exercise 1</a
+              >
               <a class="nav-link" href="./ex2.html">Exercise 2</a>
               <a class="nav-link" href="./ex3.html">Exercise 3</a>
               <a class="nav-link" href="./ex4.html">Exercise 4</a>
               <a class="nav-link" href="./ex5.html">Exercise 5</a>
-              <a class="nav-link active" aria-current="page" href="#"
-                >Exercise 6</a
-              >
-              <a class="nav-link" href="./betterWords.html">Words</a>
+              <a class="nav-link" href="./ex6.html">Exercise 6</a>
+              <a class="nav-link active" aria-current="page" href="#">Words</a>
             </div>
           </div>
         </div>
@@ -50,29 +51,47 @@
     <main>
       <section>
         <br />
-        <h1 class="text-center">Armstrong numbers</h1>
+        <h1 class="text-center">Let's Play</h1>
         <br />
-        <h4 class="text-center">
-          How many armstrong numbers are between 0 and 100000?
-        </h4>
+        <h4 class="text-center">Try to guess my word</h4>
         <br />
-      </section>
-      <div class="container text-center">
-        <button
-          type="button"
-          class="btn btn-info"
-          id="startComputing"
-          style="background-color: #b0e6f5"
-        >
-          Calculate
-        </button>
-      </div>
-      <br/>
-      <section class="container text-center" id="showResult">
+        <h6 class="text-center" id="attempts"></h6>
+        <br />
+        <h5 class="text-center" id="winOrLose"></h5>
+        <br />
+        <div class="container text-center">
+          <form>
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="5 letters word"
+                aria-label="5 letters word"
+                aria-describedby="textInput"
+                id="textInput"
+              />
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                id="checkWord"
+              >
+                Try
+              </button>
+            </div>
+          </form>
+          <p style="color: rgb(245, 64, 64);" id="errorMsg"></p>
+          <p class="text-center">
+            <span style="color:#a0f6a4">Green: letter present, wrong position</span> <br/>
+            <span style="color:yellow">Yellow: letter present, right position</span>
+        </p>
+        <br />
+        </div>
+        <div class="container text-center" id="inputs">
+        </div>
       </section>
     </main>
 
+    <script src="js/words.js"></script>
     <script src="js/bootstrap-5.2.3-dist/bootstrap.bundle.min.js"></script>
-    <script src="js/ex6.js"></script>
   </body>
 </html>
