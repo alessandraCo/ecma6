@@ -1,9 +1,9 @@
 {
     let attempts = 5;
     let secretWord;
-    let secretMap = new Map();
     let secretPositions = new Map();
-    let inputMap = new Map();
+    let inputPositions = new Map();
+    let keyMap = new Map();
     let found = false;
 
     const comparations = ({
@@ -19,19 +19,17 @@
     const keyboard = document.getElementById("alphabetContainer");
 
     //keyboard manager
-    const keyboardManger = (letter, compare) => {
+    const keyboardManger = (keyMap) => {
         let alphabet = keyboard.children;
-        for (j = 0; j < alphabet.length; j++) {
-            if (alphabet[j].innerText === letter) {
-                if (compare === comparations.LETTER) {
+        for (let j = 0; j < alphabet.length; j++) {
+            let letter = alphabet[j].innerText;
+            if (keyMap.has(letter)) {
+                if (keyMap.get(letter) === comparations.LETTER) {
                     alphabet[j].style.backgroundColor = "#a0f6a4";
-                    return;
-                } else if (compare === comparations.POSITION) {
+                } else if (keyMap.get(letter) === comparations.POSITION) {
                     alphabet[j].style.backgroundColor = "yellow";
-                    return;
-                } else {
+                } else if (keyMap.get(letter) === comparations.NOTHING) {
                     alphabet[j].style.backgroundColor = "lightgrey";
-                    return;
                 }
             }
         }
@@ -40,7 +38,7 @@
 
     const resetKeyboard = () => {
         let alphabet = keyboard.children;
-        for (j = 0; j < alphabet.length; j++) { 
+        for (j = 0; j < alphabet.length; j++) {
             alphabet[j].style.backgroundColor = "#b0e6f5";
         }
     };
@@ -61,32 +59,8 @@
         }
     };
 
-    //counting number of the same letter
-    const countSameLetter = (word, letter) => {
-        const array = word.split('');
-        let count = 0;
-        array.forEach(element => {
-            if (element === letter) {
-                count++;
-            }
-        });
-        //console.log(`there are ${count} letter ${letter} in ${word}`);
-        return count;
-    };
-
-    //mapping world letter
-    const mapThisWord = (word, map) => {
-        map.clear();
-        const array = word.split('');
-        array.forEach(letter => {
-            const count = countSameLetter(word, letter);
-            //key: letter
-            //value: number of the same letter
-            map.set(letter, count);
-        });
-    };
-
     //genereting secret word using db json on localhost
+    //C:\dev\corso\server>json-server --watch word5.json
     const generateSecretWord = () => {
         const pr1 = fetch('http://localhost:3000/parole');
         const pr2 = pr1.then(convertiJson);
@@ -100,8 +74,8 @@
             //choosing randomly a new secret word
             const random = Math.floor(Math.random() * data.length);
             secretWord = data[random];
+            //console.log(secretWord);
             //mapping secret word
-            mapThisWord(secretWord, secretMap);
             mapPositions(secretWord, secretPositions);
         };
 
@@ -117,53 +91,42 @@
         showAttempts();
     };
 
-    //letter present or letter present and in right position
-    //0: letter NOT present, 1: letter present, 2: letter present and right position
-    const isPresentOrRightPos = (letter, index) => {
-        //if the letter is present
-        if (secretMap.has(letter)) {
-            console.log(`letter ${letter} is present`);
-            const arraySecret = secretPositions.get(letter);
-            //right position
-            if (arraySecret.includes(index)) {
-                console.log(`letter ${letter} is in the right position`);
-                //2: letter present and right position
-                const result = comparations.POSITION;
-                return result;
+    //checks if letter is present or in right position
+    //NOTHING: letter NOT present, LETTER: letter present, POSITION: letter present and right position
+    const isPresentOrRightPos = (container, keyboardMap) => {
+        //for each letter in secret word (for each secretMap key)
+        for (const letter of secretPositions.keys()) {
+            //does input word contains the letter?
+            if (inputPositions.has(letter)) {
+                //preparing html element:
+                const collection = container.children;
+                //how many letters are there?
+                //if inputLetters > secretLetters some letters of input word are extra, so (even if present) won't be displayed in green 
+                const arraySecret = secretPositions.get(letter);
+                let arrayInput = inputPositions.get(letter);
+                arraySecret.forEach(pos => {
+                    //searching for letter in the same position first
+                    if (arrayInput.includes(pos)) {
+                        const index = arrayInput.indexOf(pos);
+                        arrayInput.splice(index, 1);
+                        collection[pos].style.backgroundColor = "yellow";
+                        keyboardMap.set(letter, comparations.POSITION);
+                        //console.log(`letter ${letter}: ${arrayInput}`);
+                    } else {
+                        const index = arrayInput.at(0);
+                        arrayInput.splice(0, 1);
+                        collection[index].style.backgroundColor = "#a0f6a4";
+                        if (keyboardMap.get(letter) !== comparations.POSITION) {
+                            keyboardMap.set(letter, comparations.LETTER);
+                        }
+                        //console.log(`letter ${letter}: ${arrayInput}`);
+                    }
+                });
             } else {
-                if (inputMap.get(letter) > 1) {
-                    //0: letter NOT present (already found)
-                    const result = comparations.NOTHING;
-                    return result;
-                } else {
-                    //1: letter present
-                    const result = comparations.LETTER;
-                    return result;
-                }
+                console.log(`${letter} not present`);
             }
         }
-        //0: letter NOT present
-        const result = comparations.NOTHING;
-        return result;
     };
-
-    //the letter is in the right position
-    // const checkPosition = (word, letter) => {
-    //     if (secretWord.indexOf(letter) === word.indexOf(letter)) {
-    //         console.log(`letter ${letter} is in the right position`);
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
-    //the letter is present
-    // const checkLetter = (letter) => {
-    //     if (secretWord.includes(letter)) {
-    //         console.log(`letter ${letter} is present`);
-    //         return true;
-    //     }
-    //     return false;
-    // };
 
     const showAttempts = () => {
         tentativi.innerHTML = `You have ${attempts} attempts left`;
@@ -191,8 +154,6 @@
         const inputIn = document.getElementById("textInput").value;
         //remove spaces and in lower case
         const input = inputIn.trim().toLowerCase();
-        //mapping input
-        mapThisWord(input, inputMap);
         if (attempts == 0) {
             if (input === secretWord) { found = true; }
             reset();
@@ -204,38 +165,31 @@
             attempts++;
             return;
         } else {
-            const inputContainer = document.createElement("div");
-            for (i = 0; i < input.length; i++) {
-                let compare;
-                const letterContainer = document.createElement("div");
-                letterContainer.classList.add("wordLetter");
-                letterContainer.innerText = input[i];
-                if (input !== secretWord) {
-                    compare = isPresentOrRightPos(input[i], i);
-                    if (compare === comparations.LETTER) {
-                        letterContainer.style.backgroundColor = "#a0f6a4";
-                    }
-                    if (compare === comparations.POSITION) {
-                        letterContainer.style.backgroundColor = "yellow";
-                    }
+            if (input !== secretWord) {
+                //mapping input
+                mapPositions(input, inputPositions);
+                //creating html elements for showing input with tips
+                const inputContainer = document.createElement("div");
+                for (i = 0; i < input.length; i++) {
+                    const letterContainer = document.createElement("div");
+                    letterContainer.classList.add("wordLetter");
+                    letterContainer.innerText = input[i];
                     inputContainer.appendChild(letterContainer);
-                    letters.appendChild(inputContainer);
-                    keyboardManger(input[i], compare);
-                    // const letterPresent = checkLetter(input[i]);
-                    // if (letterPresent) {
-                    //     letterContainer.style.backgroundColor = "#a0f6a4";
-                    // }
-                    // const positionPresent = checkPosition(input, input[i]);
-                    // if (positionPresent) {
-                    //     letterContainer.style.backgroundColor = "yellow";
-                    // }
-                } else {
-                    found = true;
-                    reset();
-                    return;
                 }
+                //map for keyboard manager
+                keyMap.clear();
+                for (inputKey of inputPositions.keys()) {
+                    keyMap.set(inputKey, comparations.NOTHING)
+                }
+                isPresentOrRightPos(inputContainer, keyMap);
+                letters.appendChild(inputContainer);
+                keyboardManger(keyMap);
+                showAttempts();
+            } else {
+                found = true;
+                reset();
+                return;
             }
-            showAttempts();
         }
     };
 }
