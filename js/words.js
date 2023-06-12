@@ -115,7 +115,9 @@
                     } else {
                         const index = arrayInput.at(0);
                         arrayInput.splice(0, 1);
-                        collection[index].style.backgroundColor = "#a0f6a4";
+                        if(index != null && index != undefined) {
+                            collection[index].style.backgroundColor = "#a0f6a4";
+                        }
                         if (keyboardMap.get(letter) !== comparations.POSITION) {
                             keyboardMap.set(letter, comparations.LETTER);
                         }
